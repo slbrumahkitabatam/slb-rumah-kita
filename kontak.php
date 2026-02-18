@@ -144,14 +144,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col-lg-10">
                 <div class="card shadow-sm border-0">
                     <div class="card-body p-0">
-                        <!-- Google Maps Placeholder - Ganti dengan embed Google Maps yang sebenarnya -->
+                        <!-- Google Maps - Lokasi SLB Rumah Kita Batam -->
                         <iframe 
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.123456789!2d103.959445!3d1.141689!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMcKwMDUnMzAuMyJOIDEwM8KwNTcnMzMuOCJF!5e0!3m2!1sen!2sid!4v1234567890123"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d433.8480841903853!2d103.9460378250045!3d1.1068307360812069!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31d98b647bf2c25b%3A0x937c4300e782282a!2sSLB%20Kartini!5e1!3m2!1sid!2sid!4v1771427126569!5m2!1sid!2sid" 
                             width="100%" 
                             height="400" 
                             style="border:0;" 
                             allowfullscreen="" 
-                            loading="lazy">
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
                         </iframe>
                     </div>
                 </div>

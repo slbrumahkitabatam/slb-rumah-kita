@@ -27,11 +27,13 @@ $profil = fetchOne("SELECT * FROM halaman WHERE slug = 'tentang'");
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="https://via.placeholder.com/600x400/4A90E2/ffffff?text=SLB+Rumah+Kita+Batam" 
-                     alt="Tentang Sekolah" class="img-fluid rounded shadow">
+                <img src="gambar/Tentang Sekolah.jpg" 
+                     alt="Tentang Sekolah" 
+                     class="img-fluid rounded shadow"
+                     onerror="this.src='https://via.placeholder.com/600x400/4A90E2/ffffff?text=SLB+Rumah+Kita+Batam'">
             </div>
             <div class="col-lg-6">
-                <h2 class="section-title">Tentang Sekolah4444444444444444</h2>
+                <h2 class="section-title">Tentang Sekolah</h2>
                 <?php echo $profil ? $profil['isi'] : '<p>Memuat informasi...</p>'; ?>
                 <a href="profil.php" class="btn btn-primary mt-3">Selengkapnya <i class="fas fa-arrow-right ms-2"></i></a>
             </div>

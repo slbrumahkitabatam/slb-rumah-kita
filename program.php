@@ -237,7 +237,7 @@ require_once 'includes/header.php';
             <div class="col-md-3 col-6 mb-4">
                 <div class="text-center">
                     <i class="fas fa-pray fa-3x text-primary mb-3"></i>
-                    <h5>Masjid</h5>
+                    <h5>Mesjid</h5>
                 </div>
             </div>
         </div>

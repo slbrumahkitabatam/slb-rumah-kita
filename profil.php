@@ -22,7 +22,7 @@ $visi_misi = fetchOne("SELECT * FROM halaman WHERE slug = 'visi-misi'");
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="https://via.placeholder.com/600x450/4A90E2/ffffff?text=Profil+Sekolah" 
+                <img src="gambar/halaman.sekolah.avif" 
                      alt="Profil Sekolah" class="img-fluid rounded shadow">
             </div>
             <div class="col-lg-6">
@@ -112,65 +112,50 @@ $visi_misi = fetchOne("SELECT * FROM halaman WHERE slug = 'visi-misi'");
     <div class="container">
         <h2 class="section-title text-center mb-5">Struktur Organisasi</h2>
         
+        <?php
+        $guru_list = fetchAll("SELECT * FROM guru WHERE aktif = 1 ORDER BY urutan ASC, nama ASC");
+        if ($guru_list):
+        ?>
         <div class="row justify-content-center">
-            <div class="col-lg-8">
+            <div class="col-lg-12">
                 <div class="card border-0 shadow-sm">
-                    <div class="card-body p-5 text-center">
-                        <!-- Kepala Sekolah -->
-                        <div class="mb-4">
-                            <div class="d-inline-block">
-                                <img src="https://via.placeholder.com/150x150/4A90E2/ffffff?text=Kepala+Sekolah" 
-                                     alt="Kepala Sekolah" class="rounded-circle mb-3" width="120" height="120">
-                                <h5 class="fw-bold">Drs. Ahmad Fauzi, M.Pd</h5>
-                                <p class="text-muted mb-0">Kepala Sekolah</p>
+                    <div class="card-body p-5">
+                        <div class="row justify-content-center">
+                            <?php foreach ($guru_list as $item): ?>
+                            <div class="col-md-4 col-lg-3 mb-4">
+                                <div class="card h-100 border-0 text-center">
+                                    <div class="card-body">
+                                        <?php if ($item['foto']): ?>
+                                            <img src="uploads/guru/<?php echo htmlspecialchars($item['foto']); ?>" 
+                                                 alt="<?php echo htmlspecialchars($item['nama']); ?>" 
+                                                 class="rounded-circle mb-3" width="150" height="150" 
+                                                 style="object-fit: cover; border: 4px solid #4A90E2;">
+                                        <?php else: ?>
+                                            <img src="https://via.placeholder.com/150x150/4A90E2/ffffff?text=<?php echo urlencode(substr($item['nama'], 0, 1)); ?>" 
+                                                 alt="<?php echo htmlspecialchars($item['nama']); ?>" 
+                                                 class="rounded-circle mb-3" width="150" height="150" 
+                                                 style="object-fit: cover; border: 4px solid #4A90E2;">
+                                        <?php endif; ?>
+                                        <h5 class="fw-bold"><?php echo htmlspecialchars($item['nama']); ?></h5>
+                                        <p class="text-primary fw-bold mb-2"><?php echo htmlspecialchars($item['jabatan']); ?></p>
+                                        <?php if ($item['deskripsi']): ?>
+                                            <p class="text-muted small"><?php echo htmlspecialchars(substr($item['deskripsi'], 0, 100)); ?>...</p>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <hr class="my-4">
-                        
-                        <!-- Wakil Kepala Sekolah -->
-                        <div class="row">
-                            <div class="col-md-6 mb-4">
-                                <img src="https://via.placeholder.com/100x100/357ABD/ffffff?text=Waka+Kurikulum" 
-                                     alt="Waka Kurikulum" class="rounded-circle mb-2" width="80" height="80">
-                                <h6 class="fw-bold">Siti Aminah, S.Pd</h6>
-                                <p class="text-muted small">Waka Kurikulum</p>
-                            </div>
-                            <div class="col-md-6 mb-4">
-                                <img src="https://via.placeholder.com/100x100/357ABD/ffffff?text=Waka+Kesiswaan" 
-                                     alt="Waka Kesiswaan" class="rounded-circle mb-2" width="80" height="80">
-                                <h6 class="fw-bold">Budi Santoso, S.Pd</h6>
-                                <p class="text-muted small">Waka Kesiswaan</p>
-                            </div>
-                        </div>
-                        
-                        <hr class="my-4">
-                        
-                        <!-- Guru -->
-                        <div class="row">
-                            <div class="col-md-4 mb-3">
-                                <img src="https://via.placeholder.com/80x80/5D9CEC/ffffff?text=Guru+1" 
-                                     alt="Guru" class="rounded-circle mb-2" width="60" height="60">
-                                <h6 class="small fw-bold">Rina Wahyuni, S.Pd</h6>
-                                <p class="text-muted small">Guru SDLB</p>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <img src="https://via.placeholder.com/80x80/5D9CEC/ffffff?text=Guru+2" 
-                                     alt="Guru" class="rounded-circle mb-2" width="60" height="60">
-                                <h6 class="small fw-bold">Dewi Sartika, S.Pd</h6>
-                                <p class="text-muted small">Guru SMPLB</p>
-                            </div>
-                            <div class="col-md-4 mb-3">
-                                <img src="https://via.placeholder.com/80x80/5D9CEC/ffffff?text=Guru+3" 
-                                     alt="Guru" class="rounded-circle mb-2" width="60" height="60">
-                                <h6 class="small fw-bold">Agus Setiawan, S.Pd</h6>
-                                <p class="text-muted small">Guru SMALB</p>
-                            </div>
+                            <?php endforeach; ?>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <?php else: ?>
+        <div class="text-center py-5">
+            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+            <p class="text-muted">Belum ada data guru yang ditampilkan</p>
+        </div>
+        <?php endif; ?>
     </div>
 </section>
 
