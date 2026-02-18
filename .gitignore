@@ -1,0 +1,22 @@
+# Uploads
+uploads/*
+!uploads/.gitkeep
+
+# Database
+*.sql.backup
+*.sqlite
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+error_log
