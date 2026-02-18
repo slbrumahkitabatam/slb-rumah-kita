@@ -1,4 +1,4 @@
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/rumahkitabtmweb/public_html
-    - /bin/cp -R * $DEPLOYPATH
+    - export DEPLOYPATH=/home/rumahkitabtmweb/public_html/
+    - /bin/cp -R . $DEPLOYPATH
