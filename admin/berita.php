@@ -18,47 +18,119 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Generate slug
     $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $judul)));
     
-    // Handle file upload
+    // Handle file upload with proper error handling
     $gambar = '';
-    if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] === UPLOAD_ERR_OK) {
+    $uploadError = '';
+    
+    if (isset($_FILES['gambar']) && $_FILES['gambar']['error'] !== UPLOAD_ERR_NO_FILE) {
         $uploadDir = '../uploads/berita/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
         
-        $ext = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
-        $gambar = uniqid() . '.' . $ext;
-        move_uploaded_file($_FILES['gambar']['tmp_name'], $uploadDir . $gambar);
+        // Check for upload errors
+        if ($_FILES['gambar']['error'] !== UPLOAD_ERR_OK) {
+            $uploadErrors = [
+                UPLOAD_ERR_INI_SIZE => 'Ukuran file melebihi batas maximum (upload_max_filesize)',
+                UPLOAD_ERR_FORM_SIZE => 'Ukuran file melebihi batas maximum form',
+                UPLOAD_ERR_PARTIAL => 'File hanya terupload sebagian',
+                UPLOAD_ERR_NO_TMP_DIR => 'Folder temporary tidak ditemukan',
+                UPLOAD_ERR_CANT_WRITE => 'Gagal menulis file ke disk',
+                UPLOAD_ERR_EXTENSION => 'Upload file dihentikan oleh extension PHP'
+            ];
+            $uploadError = $uploadErrors[$_FILES['gambar']['error']] ?? 'Terjadi kesalahan saat upload file';
+        } else {
+            // Validate file type
+            $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mimeType = finfo_file($finfo, $_FILES['gambar']['tmp_name']);
+            finfo_close($finfo);
+            
+            if (!in_array($mimeType, $allowedTypes)) {
+                $uploadError = 'Tipe file tidak diizinkan. Hanya file gambar (JPG, PNG, GIF, WEBP) yang diperbolehkan.';
+            } else {
+                // Validate file size (max 5MB)
+                $maxSize = 5 * 1024 * 1024; // 5MB
+                if ($_FILES['gambar']['size'] > $maxSize) {
+                    $uploadError = 'Ukuran file terlalu besar. Maksimal 5MB.';
+                } else {
+                    // Upload file
+                    $ext = pathinfo($_FILES['gambar']['name'], PATHINFO_EXTENSION);
+                    $gambar = uniqid() . '.' . $ext;
+                    
+                    if (!move_uploaded_file($_FILES['gambar']['tmp_name'], $uploadDir . $gambar)) {
+                        $uploadError = 'Gagal menyimpan file ke server. Periksa permission folder uploads.';
+                        $gambar = '';
+                    }
+                }
+            }
+        }
     }
     
     if ($action === 'tambah') {
-        if ($judul && $isi) {
-            execute(
-                "INSERT INTO berita (judul, slug, isi, gambar, tanggal, penulis) VALUES (?, ?, ?, ?, ?, ?)",
-                [$judul, $slug, $isi, $gambar, $tanggal, $penulis]
-            );
-            $message = 'Berita berhasil ditambahkan!';
-            $messageType = 'success';
+        if ($uploadError) {
+            $message = 'Upload gagal: ' . $uploadError;
+            $messageType = 'danger';
+        } elseif ($judul && $isi) {
+            try {
+                execute(
+                    "INSERT INTO berita (judul, slug, isi, gambar, tanggal, penulis) VALUES (?, ?, ?, ?, ?, ?)",
+                    [$judul, $slug, $isi, $gambar, $tanggal, $penulis]
+                );
+                $message = 'Berita berhasil ditambahkan!';
+                $messageType = 'success';
+                $action = ''; // Reset action to show list
+            } catch (PDOException $e) {
+                $message = 'Gagal menyimpan ke database: ' . $e->getMessage();
+                $messageType = 'danger';
+                // Delete uploaded file if database insert failed
+                if ($gambar && file_exists($uploadDir . $gambar)) {
+                    unlink($uploadDir . $gambar);
+                }
+            }
         } else {
             $message = 'Mohon lengkapi semua field!';
             $messageType = 'danger';
         }
     } elseif ($action === 'edit') {
-        if ($judul && $isi) {
-            if ($gambar) {
-                execute(
-                    "UPDATE berita SET judul = ?, slug = ?, isi = ?, gambar = ?, tanggal = ?, penulis = ? WHERE id = ?",
-                    [$judul, $slug, $isi, $gambar, $tanggal, $penulis, $id]
-                );
-            } else {
-                execute(
-                    "UPDATE berita SET judul = ?, slug = ?, isi = ?, tanggal = ?, penulis = ? WHERE id = ?",
-                    [$judul, $slug, $isi, $tanggal, $penulis, $id]
-                );
+        if ($uploadError) {
+            $message = 'Upload gagal: ' . $uploadError;
+            $messageType = 'danger';
+        } elseif ($judul && $isi) {
+            try {
+                // Get old image for deletion if new image is uploaded
+                $oldGambar = '';
+                if ($gambar) {
+                    $oldData = fetchOne("SELECT gambar FROM berita WHERE id = ?", [$id]);
+                    $oldGambar = $oldData['gambar'] ?? '';
+                }
+                
+                if ($gambar) {
+                    execute(
+                        "UPDATE berita SET judul = ?, slug = ?, isi = ?, gambar = ?, tanggal = ?, penulis = ? WHERE id = ?",
+                        [$judul, $slug, $isi, $gambar, $tanggal, $penulis, $id]
+                    );
+                    // Delete old image if update successful
+                    if ($oldGambar && file_exists($uploadDir . $oldGambar)) {
+                        unlink($uploadDir . $oldGambar);
+                    }
+                } else {
+                    execute(
+                        "UPDATE berita SET judul = ?, slug = ?, isi = ?, tanggal = ?, penulis = ? WHERE id = ?",
+                        [$judul, $slug, $isi, $tanggal, $penulis, $id]
+                    );
+                }
+                $message = 'Berita berhasil diperbarui!';
+                $messageType = 'success';
+                $action = '';
+            } catch (PDOException $e) {
+                $message = 'Gagal memperbarui data: ' . $e->getMessage();
+                $messageType = 'danger';
+                // Delete new image if database update failed
+                if ($gambar && file_exists($uploadDir . $gambar)) {
+                    unlink($uploadDir . $gambar);
+                }
             }
-            $message = 'Berita berhasil diperbarui!';
-            $messageType = 'success';
-            $action = '';
         } else {
             $message = 'Mohon lengkapi semua field!';
             $messageType = 'danger';
