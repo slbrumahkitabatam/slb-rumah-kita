@@ -14,8 +14,8 @@ $profil = fetchOne("SELECT * FROM halaman WHERE slug = 'tentang'");
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8">
-                <h1 class="display-4 fw-bold mb-4">Selamat Datang di123 <?php echo htmlspecialchars($pengaturan['nama_sekolah']); ?></h1>
-                <p class="lead mb-4">Membangun Masa Depan Cerah bagi Anak Berkebutuhan Khusus</p>
+                <h1 class="display-4 fw-bold mb-4">Selamat Datang di <?php echo htmlspecialchars($pengaturan['nama_sekolah']); ?></h1>
+                <p class="lead mb-4">Membangun Masa Depan Cerah bagi Anak Berkebutuhan Khusus123</p>
                 <a href="kontak.php" class="btn btn-light btn-lg px-5 py-3 fw-bold">Hubungi Kami</a>
             </div>
         </div>
