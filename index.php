@@ -31,7 +31,7 @@ $profil = fetchOne("SELECT * FROM halaman WHERE slug = 'tentang'");
                      alt="Tentang Sekolah" class="img-fluid rounded shadow">
             </div>
             <div class="col-lg-6">
-                <h2 class="section-title">Tentang Sekolah</h2>
+                <h2 class="section-title">Tentang Sekolah3333333333333333333333333</h2>
                 <?php echo $profil ? $profil['isi'] : '<p>Memuat informasi...</p>'; ?>
                 <a href="profil.php" class="btn btn-primary mt-3">Selengkapnya <i class="fas fa-arrow-right ms-2"></i></a>
             </div>
