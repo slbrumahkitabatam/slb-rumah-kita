@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once '../config/database.php';
 require_once 'auth.php';
 
@@ -15,11 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $urutan = $_POST['urutan'] ?? 0;
     $aktif = isset($_POST['aktif']) ? 1 : 0;
     $icon = $_POST['icon'] ?? 'fa-file-alt';
+    $edit_id = $_POST['id'] ?? $id; // Prioritize POST id, fallback to GET id
     
-    // Generate slug
-    $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $judul)));
+    // Generate new slug
+    $new_slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $judul)));
     
     if ($action === 'tambah') {
+        $slug = $new_slug;
         if ($judul && $isi) {
             execute(
                 "INSERT INTO halaman (judul, slug, isi, urutan, aktif, icon) VALUES (?, ?, ?, ?, ?, ?)",
@@ -33,9 +34,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif ($action === 'edit') {
         if ($judul && $isi) {
+            // Get existing data to preserve slug if title hasn't changed
+            $existing_data = fetchOne("SELECT slug FROM halaman WHERE id = ?", [$edit_id]);
+            
+            // Only update slug if title changed significantly
+            if ($existing_data && strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $judul))) === $existing_data['slug']) {
+                $slug = $existing_data['slug']; // Keep existing slug
+            } else {
+                $slug = $new_slug; // Use new slug
+            }
+            
             execute(
                 "UPDATE halaman SET judul = ?, slug = ?, isi = ?, urutan = ?, aktif = ?, icon = ? WHERE id = ?",
-                [$judul, $slug, $isi, $urutan, $aktif, $icon, $id]
+                [$judul, $slug, $isi, $urutan, $aktif, $icon, $edit_id]
             );
             $message = 'Halaman berhasil diperbarui!';
             $messageType = 'success';
@@ -71,9 +82,7 @@ $active_menu = 'halaman';
     <title>SLB Rumah Kita Batam – Admin Panel</title>
     <link rel="shortcut icon" href="../gambar/icon.jpg">
     <link rel="icon" href="../gambar/icon.jpg">
- +++++++ REPLACE
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
- +++++++ REPLACE
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.ckeditor.com/4.25.1-lts/standard/ckeditor.js"></script>
@@ -116,6 +125,9 @@ $active_menu = 'halaman';
             <div class="card border-0 shadow-sm">
                 <div class="card-body p-4">
                     <form method="POST" action="?action=<?php echo $action; ?><?php echo $id ? '&id=' . $id : ''; ?>">
+                        <?php if ($id): ?>
+                        <input type="hidden" name="id" value="<?php echo $id; ?>">
+                        <?php endif; ?>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="judul" class="form-label">Judul Halaman <span class="text-danger">*</span></label>

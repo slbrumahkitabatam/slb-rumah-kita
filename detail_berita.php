@@ -1,5 +1,8 @@
 <?php
-require_once 'includes/header.php';
+require_once 'config/database.php';
+
+// Default news image
+$defaultNewsImage = 'gambar/beitadefault.png';
 
 // Ambil slug dari URL
 $slug = isset($_GET['slug']) ? $_GET['slug'] : '';
@@ -7,12 +10,16 @@ $slug = isset($_GET['slug']) ? $_GET['slug'] : '';
 // Ambil berita berdasarkan slug
 $berita = fetchOne("SELECT * FROM berita WHERE slug = ?", [$slug]);
 
+// Redirect if news not found (before sending any output)
 if (!$berita) {
     header('Location: berita.php');
     exit;
 }
 
 $pageTitle = htmlspecialchars($berita['judul']);
+
+// Now include header after we've confirmed news exists
+require_once 'includes/header.php';
 
 // Ambil berita terkait
 $berita_terkait = fetchAll("SELECT * FROM berita WHERE id != ? ORDER BY tanggal DESC LIMIT 4", [$berita['id']]);
@@ -42,7 +49,7 @@ $berita_terkait = fetchAll("SELECT * FROM berita WHERE id != ? ORDER BY tanggal 
                                  alt="<?php echo htmlspecialchars($berita['judul']); ?>" 
                                  class="img-fluid rounded shadow w-100 mb-4">
                         <?php else: ?>
-                            <img src="https://via.placeholder.com/800x400/4A90E2/ffffff?text=Berita" 
+                            <img src="<?php echo $defaultNewsImage; ?>" 
                                  alt="<?php echo htmlspecialchars($berita['judul']); ?>" 
                                  class="img-fluid rounded shadow w-100 mb-4">
                         <?php endif; ?>
@@ -98,7 +105,7 @@ $berita_terkait = fetchAll("SELECT * FROM berita WHERE id != ? ORDER BY tanggal 
                                              alt="<?php echo htmlspecialchars($item['judul']); ?>" 
                                              class="card-img-top" style="height: 150px; object-fit: cover;">
                                     <?php else: ?>
-                                        <img src="https://via.placeholder.com/300x150/4A90E2/ffffff?text=Berita" 
+                                        <img src="<?php echo $defaultNewsImage; ?>" 
                                              alt="<?php echo htmlspecialchars($item['judul']); ?>" 
                                              class="card-img-top" style="height: 150px; object-fit: cover;">
                                     <?php endif; ?>

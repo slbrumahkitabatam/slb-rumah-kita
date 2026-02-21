@@ -1,7 +1,9 @@
 <?php
-session_start();
 require_once '../config/database.php';
 require_once 'auth.php';
+
+// Default news image
+$defaultNewsImage = '../gambar/beitadefault.png';
 
 $action = $_GET['action'] ?? '';
 $id = $_GET['id'] ?? '';
@@ -377,7 +379,7 @@ $active_menu = 'berita';
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
         }
     </style>
- +++++++ REPLACE
+ 
 </head>
 <body>
     <?php require_once 'includes/sidebar.php'; ?>
@@ -494,9 +496,8 @@ $active_menu = 'berita';
                                             <img src="../uploads/berita/<?php echo htmlspecialchars($item['gambar']); ?>" 
                                                  alt="" width="50" height="50" style="object-fit: cover;" class="rounded">
                                         <?php else: ?>
-                                            <div class="bg-light rounded" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;">
-                                                <i class="fas fa-image text-muted"></i>
-                                            </div>
+                                            <img src="<?php echo $defaultNewsImage; ?>" 
+                                                 alt="" width="50" height="50" style="object-fit: cover;" class="rounded">
                                         <?php endif; ?>
                                     </td>
                                     <td>

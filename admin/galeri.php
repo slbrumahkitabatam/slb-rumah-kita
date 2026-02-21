@@ -1,7 +1,9 @@
 <?php
-session_start();
 require_once '../config/database.php';
 require_once 'auth.php';
+
+// Default gallery image
+$defaultGalleryImage = '../gambar/galerydefault.jpg';
 
 $action = $_GET['action'] ?? '';
 $id = $_GET['id'] ?? '';
@@ -164,9 +166,9 @@ $active_menu = 'galeri';
     <title>SLB Rumah Kita Batam – Admin Panel</title>
     <link rel="shortcut icon" href="../gambar/icon.jpg">
     <link rel="icon" href="../gambar/icon.jpg">
- +++++++ REPLACE
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
- +++++++ REPLACE
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -262,9 +264,9 @@ $active_menu = 'galeri';
                                  alt="<?php echo htmlspecialchars($item['judul']); ?>" 
                                  class="card-img-top" style="height: 200px; object-fit: cover;">
                         <?php else: ?>
-                            <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-                                <i class="fas fa-image fa-3x text-muted"></i>
-                            </div>
+                            <img src="<?php echo $defaultGalleryImage; ?>" 
+                                 alt="<?php echo htmlspecialchars($item['judul']); ?>" 
+                                 class="card-img-top" style="height: 200px; object-fit: cover;">
                         <?php endif; ?>
                         <div class="card-body">
                             <h5 class="card-title"><?php echo htmlspecialchars($item['judul']); ?></h5>

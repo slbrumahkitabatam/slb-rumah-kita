@@ -6,7 +6,7 @@ require_once 'includes/header.php';
 $berita_terbaru = fetchAll("SELECT * FROM berita ORDER BY tanggal DESC LIMIT 5");
 
 // Ambil profil sekolah
-$profil = fetchOne("SELECT * FROM halaman WHERE slug = 'tentang'");
+$profil = fetchOne("SELECT * FROM halaman WHERE slug = 'tentang-sekolah'");
 ?>
 
 <!-- Hero Section -->

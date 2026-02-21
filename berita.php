@@ -1,11 +1,14 @@
 <?php
 $pageTitle = 'Berita & Kegiatan';
 require_once 'includes/header.php';
+
+// Default news image
+$defaultNewsImage = 'gambar/beitadefault.png';
 ?>
 <style>
 /* Elegant Header Section */
 .elegant-header-section {
-    background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
     min-height: 400px;
     position: relative;
 }
@@ -286,7 +289,7 @@ require_once 'includes/header.php';
 }
 
 .news-card:hover .card-title a {
-    color: #4A90E2;
+    color: var(--primary-color);
 }
 
 .news-card .btn {
@@ -298,13 +301,13 @@ require_once 'includes/header.php';
 
 .news-card .btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+    box-shadow: 0 5px 15px rgba(var(--primary-color), 0.4);
 }
 
 /* Pagination Enhancement */
 .pagination .page-link {
     border: none;
-    color: #4A90E2;
+    color: var(--primary-color);
     font-weight: 600;
     padding: 10px 15px;
     border-radius: 10px;
@@ -313,13 +316,13 @@ require_once 'includes/header.php';
 }
 
 .pagination .page-link:hover {
-    background: #4A90E2;
+    background: var(--primary-color);
     color: white;
     transform: translateY(-2px);
 }
 
 .pagination .page-item.active .page-link {
-    background: linear-gradient(135deg, #4A90E2, #357ABD);
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
     border: none;
 }
 
@@ -429,16 +432,6 @@ $totalPages = ceil($total_berita['total'] / $perPage);
 $berita = fetchAll("SELECT * FROM berita ORDER BY tanggal DESC LIMIT $offset, $perPage");
 ?>
 
-<!-- Breadcrumb -->
-<nav aria-label="breadcrumb" class="bg-light py-3">
-    <div class="container">
-        <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="index.php">Beranda</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Berita</li>
-        </ol>
-    </div>
-</nav>
-
 <!-- Header -->
 <section class="elegant-header-section position-relative overflow-hidden">
     <div class="container position-relative">
@@ -509,7 +502,7 @@ $berita = fetchAll("SELECT * FROM berita ORDER BY tanggal DESC LIMIT $offset, $p
                                 <img src="uploads/berita/<?php echo htmlspecialchars($item['gambar']); ?>" 
                                      alt="<?php echo htmlspecialchars($item['judul']); ?>" class="card-img-top">
                             <?php else: ?>
-                                <img src="https://via.placeholder.com/400x250/4A90E2/ffffff?text=Berita" 
+                                <img src="<?php echo $defaultNewsImage; ?>" 
                                      alt="<?php echo htmlspecialchars($item['judul']); ?>" class="card-img-top">
                             <?php endif; ?>
                             <div class="card-body">

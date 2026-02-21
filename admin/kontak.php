@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once '../config/database.php';
 require_once 'auth.php';
 
@@ -11,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $alamat = $_POST['alamat'] ?? '';
     $telepon = $_POST['telepon'] ?? '';
     $email = $_POST['email'] ?? '';
-    $maps = $_POST['maps'] ?? '';
+    $maps_embed = $_POST['maps'] ?? '';
     $facebook = $_POST['facebook'] ?? '';
     $instagram = $_POST['instagram'] ?? '';
     $youtube = $_POST['youtube'] ?? '';
@@ -20,12 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $check = fetchOne("SELECT COUNT(*) as total FROM pengaturan");
     if ($check['total'] > 0) {
         // Update existing
-        execute("UPDATE pengaturan SET alamat = ?, telepon = ?, email = ?, maps = ?, facebook = ?, instagram = ?, youtube = ? WHERE id = (SELECT MIN(id) FROM pengaturan)", 
-                [$alamat, $telepon, $email, $maps, $facebook, $instagram, $youtube]);
+        execute("UPDATE pengaturan SET alamat = ?, telepon = ?, email = ?, maps_embed = ?, facebook = ?, instagram = ?, youtube = ? WHERE id = (SELECT MIN(id) FROM pengaturan)", 
+                [$alamat, $telepon, $email, $maps_embed, $facebook, $instagram, $youtube]);
     } else {
         // Insert new
-        execute("INSERT INTO pengaturan (alamat, telepon, email, maps, facebook, instagram, youtube) VALUES (?, ?, ?, ?, ?, ?, ?)", 
-                [$alamat, $telepon, $email, $maps, $facebook, $instagram, $youtube]);
+        execute("INSERT INTO pengaturan (alamat, telepon, email, maps_embed, facebook, instagram, youtube) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+                [$alamat, $telepon, $email, $maps_embed, $facebook, $instagram, $youtube]);
     }
     
     $message = 'Informasi kontak berhasil diperbarui!';
@@ -38,7 +37,7 @@ $settings = fetchOne("SELECT * FROM pengaturan LIMIT 1");
 $alamat = $settings['alamat'] ?? '';
 $telepon = $settings['telepon'] ?? '';
 $email = $settings['email'] ?? '';
-$maps = $settings['maps'] ?? '';
+$maps = $settings['maps_embed'] ?? '';
 $facebook = $settings['facebook'] ?? '';
 $instagram = $settings['instagram'] ?? '';
 $youtube = $settings['youtube'] ?? '';
@@ -53,7 +52,7 @@ $active_menu = 'kontak';
     <title>SLB Rumah Kita Batam – Admin Panel</title>
     <link rel="icon" type="image/jpeg" href="../gambar/icon.jpg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
- +++++++ REPLACE
+ 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>

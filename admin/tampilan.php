@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once '../config/database.php';
 require_once 'auth.php';
 
@@ -23,40 +22,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         move_uploaded_file($_FILES['logo']['tmp_name'], $uploadDir . $logo);
     }
     
-    // Check if settings exist
-    $check = fetchOne("SELECT COUNT(*) as total FROM pengaturan");
+    // Check if tampilan settings exist
+    $check = fetchOne("SELECT COUNT(*) as total FROM tampilan");
     if ($check['total'] > 0) {
-        // Update existing - hanya update field tampilan (warna dan logo)
+        // Update existing - update field tampilan (warna dan logo)
         if ($logo) {
             // Update warna dan logo
-            execute("UPDATE pengaturan SET warna_utama = ?, warna_teks = ?, logo = ? WHERE id = (SELECT MIN(id) FROM pengaturan)", 
+            execute("UPDATE tampilan SET warna_utama = ?, warna_teks = ?, logo = ? WHERE id = (SELECT MIN(id) FROM tampilan)", 
                    [$warna_utama, $warna_teks, $logo]);
         } else {
             // Update hanya warna
-            execute("UPDATE pengaturan SET warna_utama = ?, warna_teks = ? WHERE id = (SELECT MIN(id) FROM pengaturan)", 
+            execute("UPDATE tampilan SET warna_utama = ?, warna_teks = ? WHERE id = (SELECT MIN(id) FROM tampilan)", 
                    [$warna_utama, $warna_teks]);
         }
     } else {
-        // Insert new - ambil data default untuk field lain
-        $default_nama = 'SLB Rumah Kita Batam';
-        $default_alamat = '';
-        $default_telepon = '';
-        $default_email = '';
-        execute("INSERT INTO pengaturan (nama_sekolah, alamat, telepon, email, logo, warna_utama, warna_teks) VALUES (?, ?, ?, ?, ?, ?, ?)", 
-                [$default_nama, $default_alamat, $default_telepon, $default_email, $logo, $warna_utama, $warna_teks]);
+        // Insert new
+        execute("INSERT INTO tampilan (logo, warna_utama, warna_teks) VALUES (?, ?, ?)", 
+                [$logo, $warna_utama, $warna_teks]);
     }
     
     $message = 'Tampilan berhasil diperbarui!';
     $messageType = 'success';
 }
 
-// Get current settings
-$settings = fetchOne("SELECT * FROM pengaturan LIMIT 1");
+// Get current tampilan settings
+$settings = fetchOne("SELECT * FROM tampilan LIMIT 1");
 
-$nama_sekolah = $settings['nama_sekolah'] ?? 'SLB Rumah Kita Batam';
-$alamat = $settings['alamat'] ?? '';
-$telepon = $settings['telepon'] ?? '';
-$email = $settings['email'] ?? '';
 $logo = $settings['logo'] ?? '';
 $warna_utama = $settings['warna_utama'] ?? '#667eea';
 $warna_teks = $settings['warna_teks'] ?? '#333333';
@@ -71,7 +62,7 @@ $active_menu = 'tampilan';
     <title>SLB Rumah Kita Batam – Admin Panel</title>
     <link rel="icon" type="image/jpeg" href="../gambar/icon.jpg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
- +++++++ REPLACE
+
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>

@@ -3,6 +3,9 @@ require_once 'config/database.php';
 
 // Ambil pengaturan sekolah
 $pengaturan = fetchOne("SELECT * FROM pengaturan WHERE id = 1");
+
+// Ambil pengaturan tampilan (warna, font, dll)
+$tampilan = fetchOne("SELECT * FROM tampilan WHERE id = 1");
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -22,10 +25,10 @@ $pengaturan = fetchOne("SELECT * FROM pengaturan WHERE id = 1");
     
     <style>
         :root {
-            --primary-color: <?php echo $pengaturan['warna_utama'] ?? '#4A90E2'; ?>;
-            --secondary-color: <?php echo $pengaturan['warna_utama'] ?? '#357ABD'; ?>;
+            --primary-color: <?php echo $tampilan['warna_utama'] ?? '#4A90E2'; ?>;
+            --secondary-color: <?php echo $tampilan['warna_utama'] ?? '#357ABD'; ?>;
             --accent-color: #F5A623;
-            --text-color: <?php echo $pengaturan['warna_teks'] ?? '#333'; ?>;
+            --text-color: <?php echo $tampilan['warna_teks'] ?? '#333'; ?>;
             --light-bg: #F8F9FA;
         }
         
@@ -35,7 +38,7 @@ $pengaturan = fetchOne("SELECT * FROM pengaturan WHERE id = 1");
         }
         
         .navbar {
-            background: <?php echo $pengaturan['warna_utama'] ?? '#4A90E2'; ?> !important;
+            background: <?php echo $tampilan['warna_utama'] ?? '#4A90E2'; ?> !important;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
@@ -46,7 +49,7 @@ $pengaturan = fetchOne("SELECT * FROM pengaturan WHERE id = 1");
         }
         
         .navbar.scrolled {
-            background: <?php echo $pengaturan['warna_utama'] ?? '#4A90E2'; ?> !important;
+            background: <?php echo $tampilan['warna_utama'] ?? '#4A90E2'; ?> !important;
             padding: 12px 0;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
         }
