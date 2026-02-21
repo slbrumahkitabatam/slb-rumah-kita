@@ -486,37 +486,394 @@ $profil = fetchOne("SELECT * FROM halaman WHERE slug = 'tentang'");
             font-size: 1.5rem !important;
         }
     }
+    
+    /* Gallery Section Styles */
+    .gallery-bg-decoration {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        z-index: 0;
+        pointer-events: none;
+    }
+    
+    .gallery-circle {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.03;
+    }
+    
+    .gallery-circle-1 {
+        width: 400px;
+        height: 400px;
+        background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+        top: -200px;
+        right: -100px;
+        animation: floatCircle 20s ease-in-out infinite;
+    }
+    
+    .gallery-circle-2 {
+        width: 300px;
+        height: 300px;
+        background: linear-gradient(135deg, #F5A623 0%, #FFD700 100%);
+        bottom: -150px;
+        left: -100px;
+        animation: floatCircle 25s ease-in-out infinite reverse;
+    }
+    
+    .gallery-circle-3 {
+        width: 200px;
+        height: 200px;
+        background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+        top: 50%;
+        left: 10%;
+        animation: floatCircle 18s ease-in-out infinite;
+    }
+    
+    @keyframes floatCircle {
+        0%, 100% {
+            transform: translateY(0) scale(1);
+        }
+        50% {
+            transform: translateY(-30px) scale(1.05);
+        }
+    }
+    
+    .gallery-grid {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .gallery-card {
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
+        cursor: pointer;
+        height: 100%;
+    }
+    
+    .gallery-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        box-shadow: 0 15px 40px rgba(74, 144, 226, 0.25);
+    }
+    
+    .gallery-image-wrapper {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 4/3;
+        width: 100%;
+    }
+    
+    .gallery-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .gallery-card:hover .gallery-image {
+        transform: scale(1.15) rotate(1deg);
+    }
+    
+    .gallery-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, 
+            rgba(74, 144, 226, 0.95) 0%, 
+            rgba(53, 122, 189, 0.95) 50%,
+            rgba(245, 166, 35, 0.85) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: all 0.4s ease;
+        backdrop-filter: blur(2px);
+    }
+    
+    .gallery-card:hover .gallery-overlay {
+        opacity: 1;
+    }
+    
+    .gallery-overlay-content {
+        text-align: center;
+        color: white;
+        transform: translateY(20px);
+        transition: all 0.4s ease;
+        padding: 1.5rem;
+    }
+    
+    .gallery-card:hover .gallery-overlay-content {
+        transform: translateY(0);
+    }
+    
+    .gallery-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+        font-size: 1.5rem;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+    
+    .gallery-card:hover .gallery-icon {
+        transform: scale(1.1) rotate(10deg);
+        background: rgba(255, 255, 255, 0.35);
+    }
+    
+    .gallery-icon i {
+        color: white;
+        transition: transform 0.3s ease;
+    }
+    
+    .gallery-card:hover .gallery-icon i {
+        transform: scale(1.2);
+    }
+    
+    .gallery-title {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.4;
+    }
+    
+    .gallery-date {
+        font-size: 0.85rem;
+        opacity: 0.95;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .gallery-date i {
+        font-size: 0.8rem;
+    }
+    
+    .no-gallery-placeholder {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .no-gallery-placeholder i {
+        opacity: 0.5;
+    }
+    
+    /* Button Enhancement */
+    .gallery-section .btn-primary {
+        background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+        border: none;
+        box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .gallery-section .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s ease;
+    }
+    
+    .gallery-section .btn-primary:hover::before {
+        left: 100%;
+    }
+    
+    .gallery-section .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(74, 144, 226, 0.4);
+    }
+    
+    /* Gallery Responsive Design */
+    @media (max-width: 991px) {
+        .gallery-image-wrapper {
+            aspect-ratio: 16/10;
+        }
+        
+        .gallery-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .gallery-icon {
+            width: 50px;
+            height: 50px;
+            font-size: 1.3rem;
+        }
+        
+        .gallery-title {
+            font-size: 0.95rem;
+        }
+        
+        .gallery-date {
+            font-size: 0.8rem;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .gallery-circle-1,
+        .gallery-circle-2 {
+            display: none;
+        }
+        
+        .gallery-image-wrapper {
+            aspect-ratio: 16/9;
+        }
+        
+        .gallery-card {
+            border-radius: 12px;
+        }
+        
+        .gallery-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gallery-icon {
+            width: 45px;
+            height: 45px;
+            font-size: 1.2rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .gallery-overlay-content {
+            padding: 1rem;
+        }
+        
+        .gallery-title {
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+        
+        .gallery-date {
+            font-size: 0.75rem;
+        }
+        
+        .gallery-section .btn-lg {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
+    }
+    
+    @media (max-width: 575px) {
+        .gallery-card:hover .gallery-image {
+            transform: scale(1.05);
+        }
+        
+        .gallery-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 1.1rem;
+        }
+        
+        .gallery-overlay {
+            background: linear-gradient(135deg, 
+                rgba(74, 144, 226, 0.9) 0%, 
+                rgba(53, 122, 189, 0.9) 100%);
+        }
+        
+        .gallery-title {
+            font-size: 0.85rem;
+            -webkit-line-clamp: 3;
+        }
+        
+        .gallery-date {
+            font-size: 0.7rem;
+        }
+    }
 </style>
 
 <!-- Galeri Singkat -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <h2 class="section-title text-center">Galeri Kegiatan</h2>
-        <p class="text-center mb-5">Momen-momen berharga dari kegiatan siswa</p>
-        <div class="row">
+<section class="py-5 bg-light position-relative overflow-hidden gallery-section">
+    <!-- Background Decorative Elements -->
+    <div class="gallery-bg-decoration">
+        <div class="gallery-circle gallery-circle-1"></div>
+        <div class="gallery-circle gallery-circle-2"></div>
+        <div class="gallery-circle gallery-circle-3"></div>
+    </div>
+    
+    <div class="container position-relative">
+        <div class="text-center mb-5">
+            <h2 class="section-title mb-3">Galeri Kegiatan</h2>
+            <p class="text-muted mb-4">Momen-momen berharga dari kegiatan siswa</p>
+            <div class="section-divider mx-auto"></div>
+        </div>
+        
+        <div class="row g-4 gallery-grid">
             <?php
             $galeri = fetchAll("SELECT * FROM galeri ORDER BY tanggal DESC LIMIT 6");
             if ($galeri):
                 foreach ($galeri as $item):
             ?>
-            <div class="col-md-4 col-lg-2 mb-4">
-                <div class="gallery-item">
-                    <?php if ($item['gambar']): ?>
-                        <img src="uploads/galeri/<?php echo htmlspecialchars($item['gambar']); ?>" 
-                             alt="<?php echo htmlspecialchars($item['judul']); ?>">
-                    <?php else: ?>
-                        <img src="https://via.placeholder.com/300x250/4A90E2/ffffff?text=Galeri" 
-                             alt="<?php echo htmlspecialchars($item['judul']); ?>">
-                    <?php endif; ?>
+            <div class="col-lg-2 col-md-3 col-sm-4 col-6">
+                <div class="gallery-card">
+                    <div class="gallery-image-wrapper">
+                        <?php if ($item['gambar']): ?>
+                            <img src="uploads/galeri/<?php echo htmlspecialchars($item['gambar']); ?>" 
+                                 alt="<?php echo htmlspecialchars($item['judul']); ?>"
+                                 class="gallery-image"
+                                 onerror="this.src='https://via.placeholder.com/400x300/4A90E2/ffffff?text=Galeri'">
+                        <?php else: ?>
+                            <img src="https://via.placeholder.com/400x300/4A90E2/ffffff?text=Galeri" 
+                                 alt="<?php echo htmlspecialchars($item['judul']); ?>"
+                                 class="gallery-image">
+                        <?php endif; ?>
+                        
+                        <!-- Overlay -->
+                        <div class="gallery-overlay">
+                            <div class="gallery-overlay-content">
+                                <div class="gallery-icon">
+                                    <i class="fas fa-search-plus"></i>
+                                </div>
+                                <h6 class="gallery-title"><?php echo htmlspecialchars($item['judul']); ?></h6>
+                                <p class="gallery-date">
+                                    <i class="far fa-calendar-alt me-2"></i>
+                                    <?php echo date('d F Y', strtotime($item['tanggal'])); ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <?php 
                 endforeach;
-            endif;
+            else:
             ?>
+                <div class="col-12 text-center">
+                    <div class="no-gallery-placeholder py-5">
+                        <i class="fas fa-images fa-3x mb-3 text-muted"></i>
+                        <p class="text-muted">Belum ada galeri yang tersedia.</p>
+                    </div>
+                </div>
+            <?php endif; ?>
         </div>
-        <div class="text-center mt-4">
-            <a href="galeri.php" class="btn btn-primary">Lihat Semua Galeri</a>
+        
+        <div class="text-center mt-5">
+            <a href="galeri.php" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow hover-lift">
+                <i class="fas fa-th-large me-2"></i>Lihat Semua Galeri
+                <i class="fas fa-arrow-right ms-2"></i>
+            </a>
         </div>
     </div>
 </section>

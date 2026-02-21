@@ -22,7 +22,7 @@ $visi_misi = fetchOne("SELECT * FROM halaman WHERE slug = 'visi-misi'");
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="gambar/halaman.sekolah.avif" 
+                <img src="gambar/Tentang Sekolah4.jpg" 
                      alt="Profil Sekolah" class="img-fluid rounded shadow">
             </div>
             <div class="col-lg-6">
