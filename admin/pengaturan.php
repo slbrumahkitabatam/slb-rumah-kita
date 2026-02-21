@@ -13,20 +13,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $telepon = $_POST['telepon'] ?? '';
     $email = $_POST['email'] ?? '';
     
-    // Check if settings exist
-    $check = fetchOne("SELECT COUNT(*) as total FROM pengaturan");
-    if ($check['total'] > 0) {
-        // Update existing
-        execute("UPDATE pengaturan SET nama_sekolah = ?, alamat = ?, telepon = ?, email = ?", 
-                [$nama_sekolah, $alamat, $telepon, $email]);
-    } else {
-        // Insert new
-        execute("INSERT INTO pengaturan (nama_sekolah, alamat, telepon, email) VALUES (?, ?, ?, ?)", 
-                [$nama_sekolah, $alamat, $telepon, $email]);
+    try {
+        // Check if settings exist
+        $check = fetchOne("SELECT COUNT(*) as total FROM pengaturan");
+        if ($check && $check['total'] > 0) {
+            // Update existing
+            execute("UPDATE pengaturan SET nama_sekolah = ?, alamat = ?, telepon = ?, email = ? WHERE id = (SELECT MIN(id) FROM pengaturan)", 
+                    [$nama_sekolah, $alamat, $telepon, $email]);
+        } else {
+            // Insert new
+            execute("INSERT INTO pengaturan (nama_sekolah, alamat, telepon, email) VALUES (?, ?, ?, ?)", 
+                    [$nama_sekolah, $alamat, $telepon, $email]);
+        }
+        
+        $message = 'Pengaturan berhasil diperbarui!';
+        $messageType = 'success';
+    } catch (PDOException $e) {
+        $message = 'Terjadi kesalahan: ' . $e->getMessage();
+        $messageType = 'danger';
     }
-    
-    $message = 'Pengaturan berhasil diperbarui!';
-    $messageType = 'success';
 }
 
 // Get current settings

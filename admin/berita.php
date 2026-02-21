@@ -183,19 +183,31 @@ $active_menu = 'berita';
     
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2 class="fw-bold mb-0">
-                    <?php echo $action === 'tambah' ? 'Tambah Berita' : ($action === 'edit' ? 'Edit Berita' : 'Manajemen Berita'); ?>
-                </h2>
-                <p class="text-muted mb-0">Kelola konten berita sekolah</p>
+        <!-- Elegant Header -->
+        <div class="elegant-header">
+            <div class="header-content d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="header-icon">
+                        <i class="fas fa-newspaper"></i>
+                    </div>
+                    <h2>
+                        <?php echo $action === 'tambah' ? 'Tambah Berita Baru' : ($action === 'edit' ? 'Edit Berita' : 'Berita & Kegiatan Sekolah'); ?>
+                    </h2>
+                    <p class="subtitle">
+                        <?php echo $action === 'tambah' ? 'Buat berita baru untuk website sekolah' : ($action === 'edit' ? 'Perbarui konten berita yang ada' : 'Ikuti informasi terbaru dan kegiatan dari SLB Rumah Kita Batam'); ?>
+                    </p>
+                </div>
+                <?php if (!$action): ?>
+                <a href="?action=tambah" class="btn btn-elegant">
+                    <i class="fas fa-plus me-2"></i>Tambah Berita
+                </a>
+                <?php endif; ?>
             </div>
-            <?php if (!$action): ?>
-            <a href="?action=tambah" class="btn btn-primary">
-                <i class="fas fa-plus me-2"></i>Tambah Berita
-            </a>
-            <?php endif; ?>
+            <div class="decorative-dots">
+                <div class="dot"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
         </div>
         
         <?php if ($message): ?>

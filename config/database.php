@@ -1,8 +1,8 @@
 <?php
 // Konfigurasi Database
 define('DB_HOST', 'localhost');
-define('DB_USER', 'rumahkitabtmweb_ftth');
-define('DB_PASS', 'Of,C9kyqg4M}eXFw');
+define('DB_USER', 'root');
+define('DB_PASS', '');
 define('DB_NAME', 'rumahkitabtmweb_ftth');
 
 // Koneksi ke Database

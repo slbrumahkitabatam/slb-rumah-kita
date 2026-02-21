@@ -20,12 +20,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $check = fetchOne("SELECT COUNT(*) as total FROM pengaturan");
     if ($check['total'] > 0) {
         // Update existing
-        execute("UPDATE pengaturan SET alamat = ?, telepon = ?, email = ?", 
-                [$alamat, $telepon, $email]);
+        execute("UPDATE pengaturan SET alamat = ?, telepon = ?, email = ?, maps = ?, facebook = ?, instagram = ?, youtube = ? WHERE id = (SELECT MIN(id) FROM pengaturan)", 
+                [$alamat, $telepon, $email, $maps, $facebook, $instagram, $youtube]);
     } else {
         // Insert new
-        execute("INSERT INTO pengaturan (alamat, telepon, email) VALUES (?, ?, ?)", 
-                [$alamat, $telepon, $email]);
+        execute("INSERT INTO pengaturan (alamat, telepon, email, maps, facebook, instagram, youtube) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+                [$alamat, $telepon, $email, $maps, $facebook, $instagram, $youtube]);
     }
     
     $message = 'Informasi kontak berhasil diperbarui!';
@@ -38,10 +38,10 @@ $settings = fetchOne("SELECT * FROM pengaturan LIMIT 1");
 $alamat = $settings['alamat'] ?? '';
 $telepon = $settings['telepon'] ?? '';
 $email = $settings['email'] ?? '';
-$maps = '';
-$facebook = '';
-$instagram = '';
-$youtube = '';
+$maps = $settings['maps'] ?? '';
+$facebook = $settings['facebook'] ?? '';
+$instagram = $settings['instagram'] ?? '';
+$youtube = $settings['youtube'] ?? '';
 $active_menu = 'kontak';
 ?>
 

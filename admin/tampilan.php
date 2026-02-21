@@ -8,14 +8,11 @@ $messageType = '';
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $nama_sekolah = $_POST['nama_sekolah'] ?? '';
-    $alamat = $_POST['alamat'] ?? '';
-    $telepon = $_POST['telepon'] ?? '';
-    $email = $_POST['email'] ?? '';
     $warna_utama = $_POST['warna_utama'] ?? '#4A90E2';
     $warna_teks = $_POST['warna_teks'] ?? '#333333';
     
     // Handle logo upload
+    $logo = null;
     if (isset($_FILES['logo']) && $_FILES['logo']['error'] === UPLOAD_ERR_OK) {
         $uploadDir = '../uploads/';
         if (!is_dir($uploadDir)) {
@@ -24,27 +21,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $ext = pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION);
         $logo = 'logo.' . $ext;
         move_uploaded_file($_FILES['logo']['tmp_name'], $uploadDir . $logo);
-    } else {
-        $logo = '';
     }
     
     // Check if settings exist
     $check = fetchOne("SELECT COUNT(*) as total FROM pengaturan");
     if ($check['total'] > 0) {
-        // Update existing
-        $update_query = "UPDATE pengaturan SET nama_sekolah = ?, alamat = ?, telepon = ?, email = ?";
-        $params = [$nama_sekolah, $alamat, $telepon, $email];
-        
+        // Update existing - hanya update field tampilan (warna dan logo)
         if ($logo) {
-            $update_query .= ", logo = ?";
-            $params[] = $logo;
+            // Update warna dan logo
+            execute("UPDATE pengaturan SET warna_utama = ?, warna_teks = ?, logo = ? WHERE id = (SELECT MIN(id) FROM pengaturan)", 
+                   [$warna_utama, $warna_teks, $logo]);
+        } else {
+            // Update hanya warna
+            execute("UPDATE pengaturan SET warna_utama = ?, warna_teks = ? WHERE id = (SELECT MIN(id) FROM pengaturan)", 
+                   [$warna_utama, $warna_teks]);
         }
-        
-        execute($update_query, $params);
     } else {
-        // Insert new
-        execute("INSERT INTO pengaturan (nama_sekolah, alamat, telepon, email, logo) VALUES (?, ?, ?, ?, ?)", 
-                [$nama_sekolah, $alamat, $telepon, $email, $logo]);
+        // Insert new - ambil data default untuk field lain
+        $default_nama = 'SLB Rumah Kita Batam';
+        $default_alamat = '';
+        $default_telepon = '';
+        $default_email = '';
+        execute("INSERT INTO pengaturan (nama_sekolah, alamat, telepon, email, logo, warna_utama, warna_teks) VALUES (?, ?, ?, ?, ?, ?, ?)", 
+                [$default_nama, $default_alamat, $default_telepon, $default_email, $logo, $warna_utama, $warna_teks]);
     }
     
     $message = 'Tampilan berhasil diperbarui!';
@@ -59,8 +58,8 @@ $alamat = $settings['alamat'] ?? '';
 $telepon = $settings['telepon'] ?? '';
 $email = $settings['email'] ?? '';
 $logo = $settings['logo'] ?? '';
-$warna_utama = '#4A90E2';
-$warna_teks = '#333333';
+$warna_utama = $settings['warna_utama'] ?? '#667eea';
+$warna_teks = $settings['warna_teks'] ?? '#333333';
 $active_menu = 'tampilan';
 ?>
 
