@@ -21,19 +21,27 @@ SET time_zone = "+00:00";
 -- Database: `rumahkitabtmweb_ftth`
 --
 
-DELIMITER $$
 --
 -- Procedures
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `clean_security_tables` ()   BEGIN
+
+DELIMITER $$
+
+DROP PROCEDURE IF EXISTS clean_security_tables$$
+
+CREATE PROCEDURE clean_security_tables()
+BEGIN
     -- Hapus login attempts lebih dari 24 jam
-    DELETE FROM login_attempts WHERE attempt_time < DATE_SUB(NOW(), INTERVAL 24 HOUR);
-    
+    DELETE FROM login_attempts 
+    WHERE attempt_time < DATE_SUB(NOW(), INTERVAL 24 HOUR);
+
     -- Hapus security logs lebih dari 90 hari
-    DELETE FROM security_logs WHERE event_time < DATE_SUB(NOW(), INTERVAL 90 DAY);
-    
-    -- Hapus CSRF tokens yang sudah expired
-    DELETE FROM csrf_tokens WHERE expires_at < NOW() OR used = 1;
+    DELETE FROM security_logs 
+    WHERE event_time < DATE_SUB(NOW(), INTERVAL 90 DAY);
+
+    -- Hapus CSRF tokens yang sudah expired atau sudah digunakan
+    DELETE FROM csrf_tokens 
+    WHERE expires_at < NOW() OR used = 1;
 END$$
 
 DELIMITER ;
